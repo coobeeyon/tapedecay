@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - os: ubuntu-latest
@@ -28,9 +29,10 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y libasound2-dev libfreetype-dev libx11-dev \
-            libxcomposite-dev libxcursor-dev libxext-dev libxfixes-dev \
-            libxinerama-dev libxrandr-dev libxrender-dev libgl1-mesa-dev
+          sudo apt-get install -y libasound2-dev libfontconfig1-dev \
+            libfreetype-dev libx11-dev libxcomposite-dev libxcursor-dev \
+            libxext-dev libxfixes-dev libxinerama-dev libxrandr-dev \
+            libxrender-dev libgl1-mesa-dev
 
       - name: Configure
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
