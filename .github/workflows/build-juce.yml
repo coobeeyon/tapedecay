@@ -23,7 +23,7 @@ jobs:
     name: ${{ matrix.name }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
 
       - name: Install Linux dependencies
         if: runner.os == 'Linux'
@@ -43,26 +43,26 @@ jobs:
         working-directory: juce
 
       - name: Upload VST3
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TapeDecay-VST3-${{ matrix.name }}
           path: juce/build/TapeDecay_artefacts/Release/VST3/*
 
       - name: Upload LV2
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TapeDecay-LV2-${{ matrix.name }}
           path: juce/build/TapeDecay_artefacts/Release/LV2/*
 
       - name: Upload AU
         if: runner.os == 'macOS'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TapeDecay-AU-${{ matrix.name }}
           path: juce/build/TapeDecay_artefacts/Release/AU/*
 
       - name: Upload Standalone
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: TapeDecay-Standalone-${{ matrix.name }}
           path: juce/build/TapeDecay_artefacts/Release/Standalone/*
