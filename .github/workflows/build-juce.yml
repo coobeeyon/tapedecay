@@ -1,0 +1,66 @@
+name: Build JUCE Plugin
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            name: Linux
+          - os: windows-latest
+            name: Windows
+          - os: macos-latest
+            name: macOS
+
+    runs-on: ${{ matrix.os }}
+    name: ${{ matrix.name }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Linux dependencies
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libasound2-dev libfreetype-dev libx11-dev \
+            libxcomposite-dev libxcursor-dev libxext-dev libxfixes-dev \
+            libxinerama-dev libxrandr-dev libxrender-dev libgl1-mesa-dev
+
+      - name: Configure
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+        working-directory: juce
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+        working-directory: juce
+
+      - name: Upload VST3
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeDecay-VST3-${{ matrix.name }}
+          path: juce/build/TapeDecay_artefacts/Release/VST3/*
+
+      - name: Upload LV2
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeDecay-LV2-${{ matrix.name }}
+          path: juce/build/TapeDecay_artefacts/Release/LV2/*
+
+      - name: Upload AU
+        if: runner.os == 'macOS'
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeDecay-AU-${{ matrix.name }}
+          path: juce/build/TapeDecay_artefacts/Release/AU/*
+
+      - name: Upload Standalone
+        uses: actions/upload-artifact@v4
+        with:
+          name: TapeDecay-Standalone-${{ matrix.name }}
+          path: juce/build/TapeDecay_artefacts/Release/Standalone/*
