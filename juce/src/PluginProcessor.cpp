@@ -25,6 +25,16 @@ TapeDecayProcessor::createParameterLayout()
     };
 }
 
+bool TapeDecayProcessor::isBusesLayoutSupported(const BusesLayout& layouts) const
+{
+    const auto& mainOut = layouts.getMainOutputChannelSet();
+    if (mainOut != juce::AudioChannelSet::mono()
+        && mainOut != juce::AudioChannelSet::stereo())
+        return false;
+
+    return mainOut == layouts.getMainInputChannelSet();
+}
+
 void TapeDecayProcessor::prepareToPlay(double, int)
 {
 }

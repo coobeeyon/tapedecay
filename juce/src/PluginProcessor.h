@@ -13,6 +13,7 @@ class TapeDecayProcessor : public juce::AudioProcessor
 public:
     TapeDecayProcessor();
 
+    bool isBusesLayoutSupported(const BusesLayout& layouts) const override;
     void prepareToPlay(double sampleRate, int samplesPerBlock) override;
     void releaseResources() override {}
     using juce::AudioProcessor::processBlock;
